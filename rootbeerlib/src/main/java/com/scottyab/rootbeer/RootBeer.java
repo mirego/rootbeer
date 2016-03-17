@@ -43,10 +43,9 @@ public class RootBeer {
         boolean rwSystem = checkForRWPaths();
         boolean testKeys = detectTestKeys();
         boolean testSuExists = checkSuExists();
-        boolean testRootNative = checkForRootNative();
 
         return rootManagement || potentiallyDangerousApps || suBinary
-                || busyboxBinary || dangerousProps || rwSystem || testKeys || testSuExists || testRootNative;
+                || busyboxBinary || dangerousProps || rwSystem || testKeys || testSuExists;
     }
 
     /**
@@ -312,23 +311,6 @@ public class RootBeer {
         } finally {
             if (process != null) process.destroy();
         }
-    }
-
-    /**
-     * Native checks are often harder to cloak/trick so here we call through to our native root checker
-     * @return true if we found su | false if not
-     */
-    public boolean checkForRootNative() {
-
-        String binaryName = "su";
-        String[] paths = new String[Const.suPaths.length];
-        for (int i = 0; i < paths.length; i++) {
-            paths[i] = Const.suPaths[i]+binaryName;
-        }
-
-        RootBeerNative rootBeerNative = new RootBeerNative();
-        rootBeerNative.setLogDebugMessages(true);
-        return rootBeerNative.checkForRoot(paths) > 0;
     }
 
 }
